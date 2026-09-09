@@ -9,6 +9,7 @@
   }: let
     system = "x86_64-linux";
     pkgs = import nixpkgs {inherit system;};
+    qmk = pkgs.qmk.override { python3 = pkgs.python313; };
     buildFirmware = {
       keyboard,
       keymap,
@@ -26,7 +27,7 @@
           qmk
           gcc
           avrdude
-          (python3.withPackages (ps:
+          (python313.withPackages (ps:
             with ps; [
               appdirs
               argcomplete
@@ -72,8 +73,8 @@
       packages = with pkgs; [
         qmk
         git
-        python3
-        python3Packages.pip
+        python313
+        python313Packages.pip
         gcc
         avrdude
       ];
