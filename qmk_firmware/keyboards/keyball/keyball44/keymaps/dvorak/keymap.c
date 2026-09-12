@@ -24,10 +24,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // keymap for dvorak
   [0] = LAYOUT_universal(
-    ALT_T(KC_TAB), KC_QUOT  , KC_COMM   , KC_DOT    , KC_P      , KC_Y ,                                  KC_F , KC_G      , KC_C      , KC_R      , KC_L     , KC_SLSH  ,
-    CTL_T(KC_ESC),LT(2,KC_A),GUI_T(KC_O),ALT_T(KC_E),CTL_T(KC_U), KC_I ,                                  KC_D ,CTL_T(KC_H),ALT_T(KC_T),GUI_T(KC_N),LT(2,KC_S), KC_MINS  ,
-    KC_LWIN      , KC_SCLN  , KC_Q      , KC_J      , KC_K      , KC_X ,                                  KC_B , KC_M      , KC_W      , KC_V      , KC_Z     , KC_BSLS  ,
-              KC_LALT,KC_LGUI,LCTL_T(KC_LNG2)     ,LT(1,KC_TAB),LT(3,KC_LNG1),            LT(3,KC_BSPC),RSFT_T(KC_SPC), LT(2,KC_ENT),     KC_RALT  , KC_PSCR
+    ALT_T(KC_TAB), KC_QUOT  , KC_COMM  , KC_DOT  , KC_P   , KC_Y ,                                  KC_F , KC_G , KC_C , KC_R , KC_L , KC_SLSH  ,
+    CTL_T(KC_ESC), KC_A     , KC_O     , KC_E    , KC_U   , KC_I ,                                  KC_D , KC_H , KC_T , KC_N , KC_S , KC_MINS  ,
+    KC_LWIN      , KC_SCLN  , KC_Q     , KC_J    , KC_K   , KC_X ,                                  KC_B , KC_M , KC_W , KC_V , KC_Z , KC_BSLS  ,
+              KC_LALT,KC_LGUI,LCTL_T(KC_LNG2)     ,LT(1,KC_TAB),LT(3,KC_LNG1),            LT(3,KC_BSPC),RSFT_T(KC_SPC), LT(2,KC_ENT), KC_RALT , KC_PSCR
   ),
 
   [1] = LAYOUT_universal(
