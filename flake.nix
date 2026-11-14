@@ -1,11 +1,16 @@
 {
   description = "QMK firmware build";
   inputs = {
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   };
   outputs = {
     self,
     nixpkgs,
+    git-hooks,
   }: let
     system = "x86_64-linux";
     pkgs = import nixpkgs {inherit system;};
@@ -25,7 +30,6 @@
         };
         nativeBuildInputs = with pkgs; [
           qmk
-          gcc
           avrdude
           (python313.withPackages (ps:
             with ps; [
@@ -57,6 +61,26 @@
         '';
       };
   in {
+    checks.${system} = {
+      pre-commit-check = git-hooks.lib.${system}.run {
+        src = ./.;
+        hooks = {
+          alejandra = {
+            enable = true;
+            settings.verbosity = "quiet";
+          };
+          deadnix.enable = true;
+          statix.enable = true;
+        };
+      };
+    };
+    formatter.${system} = let
+      pkgs = nixpkgs.legacyPackages.${system};
+      inherit (self.checks.${system}.pre-commit-check.config) package configFile;
+    in
+      pkgs.writeShellScriptBin "pre-commit-run" ''
+        ${pkgs.lib.getExe package} run --all-files --config ${configFile}
+      '';
     packages.${system} = {
       keyball44-dvorak = buildFirmware {
         keyboard = "keyball44";
@@ -69,18 +93,18 @@
     };
     defaultPackage.${system} =
       self.packages.${system}.keyball44-dvorak;
-    devShells.${system}.default = pkgs.mkShell {
-      packages = with pkgs; [
-        qmk
-        git
-        python313
-        python313Packages.pip
-        gcc
-        avrdude
-      ];
-      shellHook = ''
-        echo "QMK dev environment ready"
-      '';
-    };
+    devShells.${system}.default = let
+      inherit (self.checks.${system}.pre-commit-check) shellHook enabledPackages;
+    in
+      pkgs.mkShell {
+        buildInputs = enabledPackages;
+        inherit shellHook;
+        packages = with pkgs; [
+          qmk
+          python313
+          python313Packages.pip
+          avrdude
+        ];
+      };
   };
 }
