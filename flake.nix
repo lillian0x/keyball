@@ -9,7 +9,7 @@
   }: let
     system = "x86_64-linux";
     pkgs = import nixpkgs {inherit system;};
-    qmk = pkgs.qmk.override { python3 = pkgs.python313; };
+    qmk = pkgs.qmk.override {python3Packages = pkgs.python313Packages;};
     buildFirmware = {
       keyboard,
       keymap,
@@ -49,7 +49,7 @@
 
           ln -s ${./qmk_firmware/keyboards/keyball} keyboards/keyball
 
-          qmk compile -kb keyball/${keyboard} -km ${keymap}
+          ALLOW_WARNINGS=yes qmk compile -kb keyball/${keyboard} -km ${keymap}
         '';
         installPhase = ''
           mkdir -p $out
